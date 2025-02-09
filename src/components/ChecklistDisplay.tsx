@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import type { ChecklistItem } from '@/lib/openai';

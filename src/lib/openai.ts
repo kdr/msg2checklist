@@ -83,7 +83,7 @@ Do not include any other text or explanations in your response.`
           // Send the item to the callback
           await onItem(item);
         }
-      } catch (e) {
+      } catch {
         // Continue accumulating if we don't have a complete JSON object yet
         continue;
       }
