@@ -18,9 +18,14 @@ export function ChecklistDisplay({ items, onUpdateItems }: ChecklistDisplayProps
     onUpdateItems(updatedItems);
   };
 
+  const deleteItem = (id: string) => {
+    const updatedItems = items.filter(item => item.id !== id);
+    onUpdateItems(updatedItems);
+  };
+
   const handleCopyAsText = () => {
     const text = items
-      .map(item => `${item.checked ? '✓' : ''}${item.text}`.trim())
+      .map(item => `${item.checked ? '✓ ' : ''}${item.text}`.trim())
       .join('\n');
     navigator.clipboard.writeText(text);
   };
@@ -44,7 +49,7 @@ export function ChecklistDisplay({ items, onUpdateItems }: ChecklistDisplayProps
         {items.map((item) => (
           <div
             key={item.id}
-            className="flex items-start gap-1 p-1 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-lg"
+            className="flex items-start gap-1 p-1 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-lg group"
           >
             <input
               type="checkbox"
@@ -59,6 +64,13 @@ export function ChecklistDisplay({ items, onUpdateItems }: ChecklistDisplayProps
             >
               {item.text}
             </span>
+            <button
+              onClick={() => deleteItem(item.id)}
+              className="text-gray-400 hover:text-red-500 transition-colors w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="Delete item"
+            >
+              ×
+            </button>
           </div>
         ))}
       </div>
@@ -72,4 +84,4 @@ export function ChecklistDisplay({ items, onUpdateItems }: ChecklistDisplayProps
       </div>
     </Card>
   );
-} 
+}

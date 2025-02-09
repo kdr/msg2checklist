@@ -46,8 +46,42 @@ export default function Home() {
         throw new Error('Failed to convert message');
       }
 
-      const data = await response.json();
-      setItems(data.items);
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('No response body');
+      }
+
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6);
+            if (data === '[DONE]') {
+              setIsLoading(false);
+              return;
+            }
+
+            try {
+              const item = JSON.parse(data);
+              if (item.error) {
+                throw new Error(item.error);
+              }
+              setItems(prev => [...prev, item]);
+            } catch (e) {
+              console.error('Failed to parse item:', e);
+            }
+          }
+        }
+      }
     } catch (e) {
       console.error('Error converting message:', e);
       setError('Failed to convert message. Please try again.');
