@@ -62,7 +62,3 @@ The easiest way to deploy this application is using the [Vercel Platform](https:
 2. Import the project to Vercel
 3. Add your `OPENAI_API_KEY` to the environment variables in your Vercel project settings
 4. Deploy!
-
-## License
-
-MIT
