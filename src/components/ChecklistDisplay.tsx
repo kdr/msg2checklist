@@ -20,27 +20,31 @@ export function ChecklistDisplay({ items, onUpdateItems }: ChecklistDisplayProps
 
   const handleCopyAsText = () => {
     const text = items
-      .map(item => `${item.checked ? '✓' : '○'} ${item.text}`)
+      .map(item => `${item.checked ? '✓' : ''}${item.text}`.trim())
       .join('\n');
     navigator.clipboard.writeText(text);
   };
 
   const handleReset = () => {
-    const resetItems = items.map(item => ({ ...item, checked: false }));
-    onUpdateItems(resetItems);
+    onUpdateItems([]);
+    localStorage.removeItem('checklist-items');
   };
+
+  useEffect(() => {
+    localStorage.removeItem('checklist-items');
+  }, []);
 
   if (items.length === 0) {
     return null;
   }
 
   return (
-    <Card className="p-4 space-y-4">
-      <div className="space-y-2">
+    <Card className="p-2 space-y-2">
+      <div className="space-y-0.5">
         {items.map((item) => (
           <div
             key={item.id}
-            className="flex items-start gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-lg"
+            className="flex items-start gap-1 p-1 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-lg"
           >
             <input
               type="checkbox"
@@ -58,7 +62,7 @@ export function ChecklistDisplay({ items, onUpdateItems }: ChecklistDisplayProps
           </div>
         ))}
       </div>
-      <div className="flex justify-end gap-2">
+      <div className="flex justify-end gap-1">
         <Button variant="outline" onClick={handleReset}>
           Reset All
         </Button>

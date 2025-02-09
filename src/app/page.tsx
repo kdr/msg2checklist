@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { MessageInput } from '@/components/MessageInput';
 import { ChecklistDisplay } from '@/components/ChecklistDisplay';
 import type { ChecklistItem } from '@/lib/openai';
+import Head from 'next/head';
 
 export default function Home() {
   const [items, setItems] = useState<ChecklistItem[]>([]);
@@ -28,6 +29,7 @@ export default function Home() {
   }, [items]);
 
   const handleConvert = async (message: string) => {
+    setItems([]); // Clear previous items
     setIsLoading(true);
     setError(null);
 
@@ -60,6 +62,9 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <Head>
+        <title>msg2checklist</title>
+      </Head>
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         <h1 className="text-3xl font-bold mb-8 text-center">
           Message to Checklist Converter
